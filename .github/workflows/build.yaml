@@ -108,8 +108,8 @@ jobs:
     - name: Build for Windows x86-64
       run: |
         cargo xtask bundle gain_gui_egui --release --target x86_64-pc-windows-msvc
-        Get-ChildItem -Path "target\\bundled\\" -Recurse
-        7z a gain_gui_egui-vst3-windows.zip target\\bundled\\gain_gui_egui.vst3
+        Get-ChildItem -Path "target\\bundled" -Recurse
+        Compress-Archive -Path "target\\bundled\\gain_gui_egui.vst3" -DestinationPath "gain_gui_egui-vst3-windows.zip"
 
     - name: Generate Changelog
       run: echo "# Release Notes" > changelog.txt  # Replace this with your actual changelog content
