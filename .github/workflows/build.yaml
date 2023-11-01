@@ -19,7 +19,7 @@ jobs:
         toolchain: stable
 
     - name: Install Development Packages
-      run: sudo apt-get update && sudo apt-get install -y libxcb-icccm4-dev libx11-xcb-dev libxcb-dri2-0 libxcb-dri2-0-dev xorg-dev libasound2-dev
+      run: sudo apt-get update && sudo apt-get install -y libxcb-icccm4-dev libx11-xcb-dev libxcb-dri2-0 libxcb-dri2-0-dev xorg-dev libasound2-dev libjack-jackd2-dev
 
     - name: Set release tag
       id: set_tag
