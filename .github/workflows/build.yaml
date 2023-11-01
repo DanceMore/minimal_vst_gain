@@ -108,6 +108,7 @@ jobs:
     - name: Build for Windows x86-64
       run: |
         cargo xtask bundle gain_gui_egui --release --target x86_64-pc-windows-msvc
+        Get-ChildItem -Path "target\\bundled\\" -Recurse
         ls target/
         ls target/bundled
         ls target/x86_64-pc-windows-msvc/release/
