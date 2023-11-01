@@ -30,7 +30,7 @@ jobs:
     - name: Build for Linux x86-64
       run: |
         rustup target add x86_64-unknown-linux-gnu
-	cargo xtask bundle gain_gui_egui --release --target x86_64-unknown-linux-gnu
+        cargo xtask bundle gain_gui_egui --release --target x86_64-unknown-linux-gnu
 
     - name: Generate Changelog
       run: echo "# Release Notes" > changelog.txt  # Replace this with your actual changelog content
@@ -65,7 +65,7 @@ jobs:
     - name: Build for macOS
       run: |
         rustup target add x86_64-apple-darwin
-	cargo xtask bundle gain_gui_egui --release --target x86_64-apple-darwin
+        cargo xtask bundle gain_gui_egui --release --target x86_64-apple-darwin
 
     - name: Generate Changelog
       run: echo "# Release Notes" > changelog.txt  # Replace this with your actual changelog content
@@ -100,7 +100,7 @@ jobs:
 
     - name: Build for Windows x86-64
       run: |
-	cargo xtask bundle gain_gui_egui --release --target x86_64-pc-windows-msvc
+        cargo xtask bundle gain_gui_egui --release --target x86_64-pc-windows-msvc
         ls target/x86_64-pc-windows-msvc/release/
 
     - name: Generate Changelog
