@@ -109,9 +109,7 @@ jobs:
       run: |
         cargo xtask bundle gain_gui_egui --release --target x86_64-pc-windows-msvc
         Get-ChildItem -Path "target\\bundled\\" -Recurse
-        ls target/
-        ls target/bundled
-        ls target/x86_64-pc-windows-msvc/release/
+        7z a gain_gui_egui-vst3-windows.zip target\\bundled\\gain_gui_egui.vst3
 
     - name: Generate Changelog
       run: echo "# Release Notes" > changelog.txt  # Replace this with your actual changelog content
@@ -121,6 +119,7 @@ jobs:
       with:
         files: |
           changelog.txt
+          gain_gui_egui-vst3-windows.zip
         body_path: changelog.txt
         tag_name: ${{ env.tag }}
         token: ${{ secrets.GITHUB_TOKEN }}
