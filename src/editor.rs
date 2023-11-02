@@ -46,29 +46,32 @@ pub(crate) fn create(
         ResizeHandle::new(cx);
 
         VStack::new(cx, |cx| {
-            HStack::new(cx, |cx| {
-                PeakMeter::new(
-                    cx,
-                    Data::peak_meter
-                        .map(|peak_meter| util::gain_to_db(peak_meter.load(Ordering::Relaxed))),
-                    Some(Duration::from_millis(600)),
-                )
-                .top(Pixels(10.0));
-            })
-            .id("top-bar");
+            VStack::new(cx, |cx| {
+                HStack::new(cx, |cx| {
+                    PeakMeter::new(
+                        cx,
+                        Data::peak_meter
+                            .map(|peak_meter| util::gain_to_db(peak_meter.load(Ordering::Relaxed))),
+                        Some(Duration::from_millis(600)),
+                    )
+                    .top(Pixels(10.0));
+                })
+                .id("top-bar");
 
-            HStack::new(cx, |cx| {
-                ParamSlider::new(cx, Data::params, |params| &params.gain);
-            })
-            .id("middle-bar");
+                HStack::new(cx, |cx| {
+                    ParamSlider::new(cx, Data::params, |params| &params.gain);
+                })
+                .id("middle-bar");
 
-            HStack::new(cx, |cx| {
-                ParamButton::new(cx, Data::params, |params| &params.left_mute).class("bypass");
-                ParamButton::new(cx, Data::params, |params| &params.left_polarity);
-                Label::new(cx, "  0.00ms  ");
-                ParamButton::new(cx, Data::params, |params| &params.right_polarity);
-                ParamButton::new(cx, Data::params, |params| &params.right_mute).class("bypass");
-            });
+                HStack::new(cx, |cx| {
+                    ParamButton::new(cx, Data::params, |params| &params.left_mute).class("bypass");
+                    ParamButton::new(cx, Data::params, |params| &params.left_polarity);
+                    Label::new(cx, "  0.00ms  ");
+                    ParamButton::new(cx, Data::params, |params| &params.right_polarity);
+                    ParamButton::new(cx, Data::params, |params| &params.right_mute).class("bypass");
+                });
+            })
+            .id("outer");
         })
         .row_between(Pixels(0.0))
         .child_left(Stretch(1.0))
