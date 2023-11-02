@@ -1,9 +1,8 @@
 [package]
-name = "gain_gui_egui"
+name = "minimal_vst_gain"
 version = "0.1.0"
 edition = "2021"
-authors = ["Robbert van der Helm <mail@robbertvanderhelm.nl>"]
-license = "ISC"
+authors = [""]
 
 description = "A simple gain plugin with an egui GUI"
 
@@ -14,7 +13,7 @@ crate-type = ["cdylib", "lib"]
 [dependencies]
 atomic_float = "0.1"
 nih_plug = { git = "https://github.com/robbert-vdh/nih-plug", features = ["assert_process_allocs", "standalone"] }
-nih_plug_egui = { git = "https://github.com/robbert-vdh/nih-plug.git" }
+nih_plug_vizia = { git = "https://github.com/robbert-vdh/nih-plug.git" }
 
 [workspace]
 members = ["xtask"]

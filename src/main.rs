@@ -1,6 +1,6 @@
 use nih_plug::prelude::*;
 
-use gain_gui_egui::Gain;
+use minimal_vst_gain::Gain;
 
 fn main() {
     nih_export_standalone::<Gain>();
