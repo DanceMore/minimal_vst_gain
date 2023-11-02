@@ -30,10 +30,10 @@ jobs:
     - name: Build for Linux x86-64
       run: |
         rustup target add x86_64-unknown-linux-gnu
-        cargo xtask bundle gain_gui_egui --release --target x86_64-unknown-linux-gnu
+        cargo xtask bundle minimal_vst_gain --release --target x86_64-unknown-linux-gnu
         ls -l target
         find target/bundled
-        zip -r gain_gui_egui-vst3-linux.zip target/bundled/gain_gui_egui.vst3
+        zip -r minimal_vst_gain-vst3-linux.zip target/bundled/minimal_vst_gain.vst3
 
     - name: Generate Changelog
       run: echo "# Release Notes" > changelog.txt  # Replace this with your actual changelog content
@@ -43,7 +43,7 @@ jobs:
       with:
         files: |
           changelog.txt
-          gain_gui_egui-vst3-linux.zip
+          minimal_vst_gain-vst3-linux.zip
         body_path: changelog.txt
         tag_name: ${{ env.tag }}
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -69,9 +69,9 @@ jobs:
     - name: Build for macOS
       run: |
         rustup target add x86_64-apple-darwin
-        cargo xtask bundle gain_gui_egui --release --target x86_64-apple-darwin
+        cargo xtask bundle minimal_vst_gain --release --target x86_64-apple-darwin
         find target/bundled
-        zip -r gain_gui_egui-vst3-macos.zip target/bundled/gain_gui_egui.vst3
+        zip -r minimal_vst_gain-vst3-macos.zip target/bundled/minimal_vst_gain.vst3
 
     - name: Generate Changelog
       run: echo "# Release Notes" > changelog.txt  # Replace this with your actual changelog content
@@ -81,7 +81,7 @@ jobs:
       with:
         files: |
           changelog.txt
-          gain_gui_egui-vst3-macos.zip
+          minimal_vst_gain-vst3-macos.zip
         body_path: changelog.txt
         tag_name: ${{ env.tag }}
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -107,9 +107,9 @@ jobs:
 
     - name: Build for Windows x86-64
       run: |
-        cargo xtask bundle gain_gui_egui --release --target x86_64-pc-windows-msvc
+        cargo xtask bundle minimal_vst_gain --release --target x86_64-pc-windows-msvc
         Get-ChildItem -Path "target\\bundled" -Recurse
-        Compress-Archive -Path "target\\bundled\\gain_gui_egui.vst3" -DestinationPath "gain_gui_egui-vst3-windows.zip"
+        Compress-Archive -Path "target\\bundled\\minimal_vst_gain.vst3" -DestinationPath "minimal_vst_gain-vst3-windows.zip"
 
     - name: Generate Changelog
       run: echo "# Release Notes" > changelog.txt  # Replace this with your actual changelog content
@@ -119,7 +119,7 @@ jobs:
       with:
         files: |
           changelog.txt
-          gain_gui_egui-vst3-windows.zip
+          minimal_vst_gain-vst3-windows.zip
         body_path: changelog.txt
         tag_name: ${{ env.tag }}
         token: ${{ secrets.GITHUB_TOKEN }}
