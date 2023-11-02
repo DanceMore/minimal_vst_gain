@@ -20,7 +20,11 @@ pub struct Gain {
     ///
     /// This is stored as voltage gain.
     peak_meter: Arc<AtomicF32>,
+
+    sample_counter: Arc<usize>,
 }
+
+const FRAME_THROTTLE: usize = 10; // Adjust as needed
 
 #[derive(Params)]
 pub struct GainParams {
@@ -52,6 +56,7 @@ impl Default for Gain {
 
             peak_meter_decay_weight: 1.0,
             peak_meter: Arc::new(AtomicF32::new(util::MINUS_INFINITY_DB)),
+            sample_counter: Arc::new(0),
         }
     }
 }
@@ -156,17 +161,34 @@ impl Plugin for Gain {
             // To save resources, a plugin can (and probably should!) only perform expensive
             // calculations that are only displayed on the GUI while the GUI is open
             if self.params.editor_state.is_open() {
-                amplitude = (amplitude / num_samples as f32).abs();
-                let current_peak_meter = self.peak_meter.load(std::sync::atomic::Ordering::Relaxed);
-                let new_peak_meter = if amplitude > current_peak_meter {
-                    amplitude
-                } else {
-                    current_peak_meter * self.peak_meter_decay_weight
-                        + amplitude * (1.0 - self.peak_meter_decay_weight)
-                };
+                //println!("[+] Editor is open");
 
-                self.peak_meter
-                    .store(new_peak_meter, std::sync::atomic::Ordering::Relaxed)
+                let mut counter: usize = *self.sample_counter.clone();
+                counter += 1;
+                //println!("[-] {}", counter);
+
+                //self.sample_counter += 1;
+                if self.sample_counter >= FRAME_THROTTLE.into() {
+                    // Perform additional processing every FRAME_THROTTLE samples
+                    //println!("[!] frame");
+
+                    amplitude = (amplitude / num_samples as f32).abs();
+                    let current_peak_meter =
+                        self.peak_meter.load(std::sync::atomic::Ordering::Relaxed);
+                    let new_peak_meter = if amplitude > current_peak_meter {
+                        amplitude
+                    } else {
+                        current_peak_meter * self.peak_meter_decay_weight
+                            + amplitude * (1.0 - self.peak_meter_decay_weight)
+                    };
+
+                    self.peak_meter
+                        .store(new_peak_meter, std::sync::atomic::Ordering::Relaxed);
+
+                    self.sample_counter = 0.into(); // Reset the counter
+                } else {
+                    self.sample_counter = counter.into();
+                }
             }
         }
 
