@@ -12,6 +12,7 @@ use crate::GainParams;
 #[derive(Lens)]
 struct Data {
     params: Arc<GainParams>,
+    peak_meter: Arc<AtomicF32>,
 }
 
 impl Model for Data {}
@@ -26,6 +27,7 @@ static WIDGETS: &'static str = include_str!("../assets/widgets.css");
 
 pub(crate) fn create(
     params: Arc<GainParams>,
+    peak_meter: Arc<AtomicF32>,
     editor_state: Arc<ViziaState>,
 ) -> Option<Box<dyn Editor>> {
     create_vizia_editor(editor_state, ViziaTheming::Builtin, move |cx, _| {
@@ -37,22 +39,20 @@ pub(crate) fn create(
 
         Data {
             params: params.clone(),
+            peak_meter: peak_meter.clone(),
         }
         .build(cx);
 
         ResizeHandle::new(cx);
 
         VStack::new(cx, |cx| {
-            Label::new(cx, "Gain GUI")
-                .font_family(vec![FamilyOwned::Name(String::from(
-                    assets::NOTO_SANS_THIN,
-                ))])
-                .font_size(30.0)
-                .height(Pixels(50.0))
-                .child_top(Stretch(1.0))
-                .child_bottom(Pixels(0.0));
+            PeakMeter::new(
+                cx,
+                Data::peak_meter
+                    .map(|peak_meter| util::gain_to_db(peak_meter.load(Ordering::Relaxed))),
+                Some(Duration::from_millis(600)),
+            );
 
-            Label::new(cx, "Gain");
             ParamSlider::new(cx, Data::params, |params| &params.gain).top(Pixels(10.0));
             // This is how adding padding works in vizia
         })
