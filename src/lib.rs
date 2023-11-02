@@ -68,10 +68,10 @@ impl Default for GainParams {
 }
 
 impl Plugin for Gain {
-    const NAME: &'static str = "Gain GUI (egui)";
-    const VENDOR: &'static str = "Moist Plugins GmbH";
-    const URL: &'static str = "https://youtu.be/dQw4w9WgXcQ";
-    const EMAIL: &'static str = "info@example.com";
+    const NAME: &'static str = "MinimalVST - Gain";
+    const VENDOR: &'static str = "DanceMore";
+    const URL: &'static str = "https://github.com/DanceMore/minimal_vst_gain";
+    const EMAIL: &'static str = "dancemore@protonmail.com";
 
     const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
@@ -158,8 +158,8 @@ impl Plugin for Gain {
 }
 
 impl ClapPlugin for Gain {
-    const CLAP_ID: &'static str = "com.moist-plugins-gmbh-egui.gain-gui";
-    const CLAP_DESCRIPTION: Option<&'static str> = Some("A smoothed gain parameter example plugin");
+    const CLAP_ID: &'static str = "io.github.dancemore.minimal_vst_pan";
+    const CLAP_DESCRIPTION: Option<&'static str> = Some("A minimal Gain plugin");
     const CLAP_MANUAL_URL: Option<&'static str> = Some(Self::URL);
     const CLAP_SUPPORT_URL: Option<&'static str> = None;
     const CLAP_FEATURES: &'static [ClapFeature] = &[
@@ -171,7 +171,7 @@ impl ClapPlugin for Gain {
 }
 
 impl Vst3Plugin for Gain {
-    const VST3_CLASS_ID: [u8; 16] = *b"GainGuiYeahBoyyy";
+    const VST3_CLASS_ID: [u8; 16] = *b"DancemorMVSTGain";
     const VST3_SUBCATEGORIES: &'static [Vst3SubCategory] =
         &[Vst3SubCategory::Fx, Vst3SubCategory::Tools];
 }
