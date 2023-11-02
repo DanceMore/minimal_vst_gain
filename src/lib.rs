@@ -1,8 +1,9 @@
 use atomic_float::AtomicF32;
 use nih_plug::prelude::*;
-use nih_plug_egui::{create_egui_editor, egui, widgets, EguiState};
+use nih_plug_vizia::ViziaState;
 use std::sync::Arc;
-use egui::{Color32, Visuals};
+
+mod editor;
 
 /// The time it takes for the peak meter to decay by 12 dB after switching to complete silence.
 const PEAK_METER_DECAY_MS: f64 = 150.0;
@@ -26,7 +27,7 @@ pub struct GainParams {
     /// The editor state, saved together with the parameter state so the custom scaling can be
     /// restored.
     #[persist = "editor-state"]
-    editor_state: Arc<EguiState>,
+    editor_state: Arc<ViziaState>,
 
     #[id = "gain"]
     pub gain: FloatParam,
@@ -46,7 +47,7 @@ impl Default for Gain {
 impl Default for GainParams {
     fn default() -> Self {
         Self {
-            editor_state: EguiState::from_size(300, 180),
+            editor_state: editor::default_state(),
 
             // See the main gain example for more details
             gain: FloatParam::new(
@@ -97,59 +98,7 @@ impl Plugin for Gain {
     }
 
     fn editor(&mut self, _async_executor: AsyncExecutor<Self>) -> Option<Box<dyn Editor>> {
-        let params = self.params.clone();
-        let peak_meter = self.peak_meter.clone();
-        create_egui_editor(
-            self.params.editor_state.clone(),
-            (),
-            |_, _| {},
-            move |egui_ctx, setter, _state| {
-
-                let custom_theme = Visuals {
-                    dark_mode: true,
-                    //override_text_color: Some(Color32::WHITE),
-                    override_text_color: Some(Color32::from_rgb(0, 166, 251)),
-		    panel_fill: Color32::from_rgb(5, 25, 35),
-                    // Set other color values and visual properties as needed.
-                    // ...
-                    ..Default::default() // Use default values for the fields you don't modify.
-                };
-
-                egui_ctx.set_visuals(custom_theme);
-
-
-
-
-                egui::CentralPanel::default().show(egui_ctx, |ui| {
-                    // NOTE: See `plugins/diopser/src/editor.rs` for an example using the generic UI widget
-
-                    // This is a fancy widget that can get all the information it needs to properly
-                    // display and modify the parameter from the parametr itself
-                    // It's not yet fully implemented, as the text is missing.
-
-                    ui.vertical_centered(|ui| {
-		        ui.heading(egui::RichText::new("Gain").underline());
-                        ui.add(widgets::ParamSlider::for_param(&params.gain, setter).with_width(200.0));
-
-                        // TODO: Add a proper custom widget instead of reusing a progress bar
-                        let peak_meter =
-                            util::gain_to_db(peak_meter.load(std::sync::atomic::Ordering::Relaxed));
-                        let peak_meter_text = if peak_meter > util::MINUS_INFINITY_DB {
-                            format!("{peak_meter:.1} dBFS")
-                        } else {
-                            String::from("-inf dBFS")
-                        };
-
-                        let peak_meter_normalized = (peak_meter + 60.0) / 60.0;
-                        ui.allocate_space(egui::Vec2::splat(2.0));
-                        ui.add(
-                            egui::widgets::ProgressBar::new(peak_meter_normalized)
-                                .text(peak_meter_text),
-                        );
-                });
-                });
-            },
-        )
+        editor::create(self.params.clone(), self.params.editor_state.clone())
     }
 
     fn initialize(
