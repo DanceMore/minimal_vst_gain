@@ -29,24 +29,27 @@ generic-ui .label {
 param-button {
   height: 30px;
   width: auto;
-  border-color: #0a0a0a;
+  border-color: #006494;
   border-width: 1px;
   child-top: 1s;
   child-right: 7px;
   child-bottom: 1s;
   child-left: 7px;
-  background-color: #d0d0d000;
+  background-color: #00649400;
   transition: background-color 0.1 0;
 }
 param-button:hover {
-  background-color: #d0d0d080;
+  background-color: #00649480;
   transition: background-color 0.1 0;
 }
 param-button:checked {
-  background-color: #d0d0d0;
+  background-color: #006494;
   transition: background-color 0.1 0;
 }
 
+/* https://nih-plug.robbertvanderhelm.nl/nih_plug/params/struct.BoolParam.html#method.make_bypass */
+/* > Only a single BoolParam can be a bypass parameter */
+/* I am not going to mess with Bypass for now ... */
 param-button.bypass {
   background-color: #ffcfcb00;
   transition: background-color 0.1 0;
@@ -72,16 +75,16 @@ param-slider {
 /* Vizia doesn't support commas in selectors */
 /* Also, WTB Sass */
 param-slider:active {
-  background-color: #8080801a;
+  background-color: #0064941a;
   transition: background-color 0.1 0;
 }
 param-slider:hover {
-  background-color: #8080801a;
+  background-color: #0064941a;
   transition: background-color 0.1 0;
 }
 
 param-slider .fill {
-  background-color: #003554;
+  background-color: #006494;
 }
 param-slider .fill--modulation {
   background-color: #a4eafc69;
@@ -146,4 +149,8 @@ resize-handle:active {
 resize-handle:hover {
   opacity: 0.8;
   transition: opacity 0.1 0;
+}
+
+#middle-bar {
+  background-color: #161616;
 }
