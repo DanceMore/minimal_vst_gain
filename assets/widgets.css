@@ -63,7 +63,7 @@ param-button.bypass:checked {
 param-slider {
   height: 30px;
   width: 180px;
-  border-color: #0a0a0a;
+  border-color: #006494;
   border-width: 1px;
   background-color: transparent;
   transition: background-color 0.1 0;
@@ -108,21 +108,21 @@ peak-meter {
 peak-meter .bar {
   height: 50%;
   border-width: 1px;
-  border-color: #0a0a0a;
+  border-color: #006494;
 }
 
 peak-meter .ticks {
   height: 50%;
 }
 peak-meter .ticks__tick {
-  background-color: #0a0a0a;
+  background-color: #00A6FB;
   top: 0;
   width: 1px;
   height: 30%;
 }
 peak-meter .ticks__label {
   top: 4px; /* In pixels in an attempt to get this to better align to the grid */
-  font-size: 11; /* 14.667px */
+  font-size: 7;
 }
 
 resize-handle {

@@ -51,10 +51,9 @@ pub(crate) fn create(
                 Data::peak_meter
                     .map(|peak_meter| util::gain_to_db(peak_meter.load(Ordering::Relaxed))),
                 Some(Duration::from_millis(600)),
-            );
+            ).top(Pixels(10.0));
 
             ParamSlider::new(cx, Data::params, |params| &params.gain).top(Pixels(10.0));
-            // This is how adding padding works in vizia
         })
         .row_between(Pixels(0.0))
         .child_left(Stretch(1.0))
