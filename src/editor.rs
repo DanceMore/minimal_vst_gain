@@ -51,9 +51,17 @@ pub(crate) fn create(
                 Data::peak_meter
                     .map(|peak_meter| util::gain_to_db(peak_meter.load(Ordering::Relaxed))),
                 Some(Duration::from_millis(600)),
-            ).top(Pixels(10.0));
+            )
+            .top(Pixels(10.0));
 
             ParamSlider::new(cx, Data::params, |params| &params.gain).top(Pixels(10.0));
+
+            HStack::new(cx, |cx| {
+                ParamButton::new(cx, Data::params, |params| &params.left_mute);
+                ParamButton::new(cx, Data::params, |params| &params.left_polarity);
+                ParamButton::new(cx, Data::params, |params| &params.right_polarity);
+                ParamButton::new(cx, Data::params, |params| &params.right_mute);
+            });
         })
         .row_between(Pixels(0.0))
         .child_left(Stretch(1.0))

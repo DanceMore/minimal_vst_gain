@@ -31,6 +31,18 @@ pub struct GainParams {
 
     #[id = "gain"]
     pub gain: FloatParam,
+
+    #[id = "left_polarity"]
+    pub left_polarity: BoolParam,
+
+    #[id = "right_polarity"]
+    pub right_polarity: BoolParam,
+
+    #[id = "left_mute"]
+    pub left_mute: BoolParam,
+
+    #[id = "right_mute"]
+    pub right_mute: BoolParam,
 }
 
 impl Default for Gain {
@@ -63,6 +75,11 @@ impl Default for GainParams {
             .with_unit(" dB")
             .with_value_to_string(formatters::v2s_f32_gain_to_db(2))
             .with_string_to_value(formatters::s2v_f32_gain_to_db()),
+
+            left_mute: BoolParam::new("L", false),
+            left_polarity: BoolParam::new("~", false),
+            right_polarity: BoolParam::new("~", false),
+            right_mute: BoolParam::new("R", false),
         }
     }
 }
@@ -150,6 +167,46 @@ impl Plugin for Gain {
 
                 self.peak_meter
                     .store(new_peak_meter, std::sync::atomic::Ordering::Relaxed)
+            }
+        }
+
+        if buffer.channels() == 2 {
+            for mut channel_samples in buffer.iter_samples() {
+                let left_polarity = self.params.left_polarity.value();
+                let right_polarity = self.params.right_polarity.value();
+                let left_mute = self.params.left_mute.value();
+                let right_mute = self.params.right_mute.value();
+
+                if left_polarity || right_polarity {
+                    // assume 0 is left, 1 is right
+                    for (sample0, sample1) in channel_samples
+                        .iter_mut()
+                        .zip(channel_samples.iter_mut().skip(1))
+                    {
+                        // Perform phase polarity inversion
+                        if left_polarity {
+                            *sample0 = -(*sample0);
+                        }
+                        if right_polarity {
+                            *sample1 = -(*sample1);
+                        }
+                    }
+                }
+
+                if left_mute || right_mute {
+                    // assume 0 is left, 1 is right
+                    for (sample0, sample1) in channel_samples
+                        .iter_mut()
+                        .zip(channel_samples.iter_mut().skip(1))
+                    {
+                        if left_mute {
+                            *sample0 = 0.0;
+                        }
+                        if right_mute {
+                            *sample1 = 0.0;
+                        }
+                    }
+                }
             }
         }
 
