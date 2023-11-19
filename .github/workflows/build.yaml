@@ -34,6 +34,7 @@ jobs:
         ls -l target
         find target/bundled
         zip -r minimal_vst_gain-vst3-linux.zip target/bundled/minimal_vst_gain.vst3
+        zip -r minimal_vst_gain-clap-linux.zip target/bundled/minimal_vst_gain.clap
 
     - name: Generate Changelog
       run: echo "# Release Notes" > changelog.txt  # Replace this with your actual changelog content
@@ -44,6 +45,7 @@ jobs:
         files: |
           changelog.txt
           minimal_vst_gain-vst3-linux.zip
+          minimal_vst_gain-clap-linux.zip
         body_path: changelog.txt
         tag_name: ${{ env.tag }}
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -72,6 +74,7 @@ jobs:
         cargo xtask bundle minimal_vst_gain --release --target x86_64-apple-darwin
         find target/bundled
         zip -r minimal_vst_gain-vst3-macos.zip target/bundled/minimal_vst_gain.vst3
+        zip -r minimal_vst_gain-clap-macos.zip target/bundled/minimal_vst_gain.clap
 
     - name: Generate Changelog
       run: echo "# Release Notes" > changelog.txt  # Replace this with your actual changelog content
@@ -82,6 +85,7 @@ jobs:
         files: |
           changelog.txt
           minimal_vst_gain-vst3-macos.zip
+          minimal_vst_gain-clap-macos.zip
         body_path: changelog.txt
         tag_name: ${{ env.tag }}
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -110,6 +114,7 @@ jobs:
         cargo xtask bundle minimal_vst_gain --release --target x86_64-pc-windows-msvc
         Get-ChildItem -Path "target\\bundled" -Recurse
         Compress-Archive -Path "target\\bundled\\minimal_vst_gain.vst3" -DestinationPath "minimal_vst_gain-vst3-windows.zip"
+        Compress-Archive -Path "target\\bundled\\minimal_vst_gain.clap" -DestinationPath "minimal_vst_gain-clap-windows.zip"
 
     - name: Generate Changelog
       run: echo "# Release Notes" > changelog.txt  # Replace this with your actual changelog content
@@ -120,6 +125,7 @@ jobs:
         files: |
           changelog.txt
           minimal_vst_gain-vst3-windows.zip
+          minimal_vst_gain-clap-windows.zip
         body_path: changelog.txt
         tag_name: ${{ env.tag }}
         token: ${{ secrets.GITHUB_TOKEN }}
