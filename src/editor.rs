@@ -31,8 +31,8 @@ pub(crate) fn create(
     editor_state: Arc<ViziaState>,
 ) -> Option<Box<dyn Editor>> {
     create_vizia_editor(editor_state, ViziaTheming::Builtin, move |cx, _| {
-        let _ = cx.add_theme(THEME);
-        let _ = cx.add_theme(WIDGETS);
+        let _ = cx.add_stylesheet(THEME);
+        let _ = cx.add_stylesheet(WIDGETS);
         nih_plug_vizia::vizia_assets::register_roboto(cx);
         assets::register_noto_sans_light(cx);
         assets::register_noto_sans_thin(cx);
